@@ -313,6 +313,7 @@ ${candidateName}`;
   }
 
   async analyzeResume(resumeText: string, jobDescription: string): Promise<ATSResult> {
+  }
   async analyzeResume(resumeText: string, jobDescription: string, customPrompt?: string): Promise<ATSResult> {
     // Ensure we have the latest API key
     await this.initializeGemini();
