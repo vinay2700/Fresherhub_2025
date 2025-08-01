@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { RefreshCw, Download, Sparkles, Brain, FileText, Zap, CheckCircle, AlertCircle, Wand2 } from 'lucide-react';
 import { geminiService } from '../services/geminiService';
+import { usageLimitService } from '../services/usageLimitService';
 import { ATSResult } from '../types/ATS';
 
 interface ResumeRebuilderProps {
@@ -24,10 +25,32 @@ const ResumeRebuilder: React.FC<ResumeRebuilderProps> = ({
   const [rebuiltResume, setRebuiltResume] = useState<RebuiltResume | null>(null);
   const [loading, setLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
+  const [canUseTools, setCanUseTools] = useState(true);
+
+  React.useEffect(() => {
+    // Subscribe to usage limit updates
+    const unsubscribe = usageLimitService.subscribe(() => {
+      setCanUseTools(usageLimitService.canUseTools());
+    });
+
+    return unsubscribe;
+  }, []);
 
   const handleRebuildResume = async () => {
+    // Check usage limit first
+    if (!usageLimitService.canUseTools()) {
+      alert('You have reached your free usage limit. Please wait for the reset time.');
+      return;
+    }
+
     if (!originalResume) {
       alert('Please provide your original resume content');
+      return;
+    }
+
+    // Use one tool attempt
+    if (!usageLimitService.useOneTool()) {
+      alert('You have reached your free usage limit. Please wait for the reset time.');
       return;
     }
 
@@ -222,10 +245,11 @@ const ResumeRebuilder: React.FC<ResumeRebuilderProps> = ({
 
             <button
               onClick={handleRebuildResume}
-              disabled={loading}
+              disabled={loading || !canUseTools}
               className="px-12 py-4 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-2xl hover:from-emerald-700 hover:to-teal-700 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed transition-all duration-300 flex items-center space-x-3 shadow-xl hover:shadow-2xl transform hover:scale-105 disabled:transform-none text-lg font-semibold mx-auto"
             >
-              {loading ? (
+              className="px-8 py-3 border-2 border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 hover:border-gray-400 transition-all duration-300 flex items-center space-x-2"
+              disabled={!canUseTools}
                 <>
                   <div className="animate-spin rounded-full h-6 w-6 border-2 border-white border-t-transparent"></div>
                   <span>AI Rebuilding Resume...</span>
@@ -234,9 +258,9 @@ const ResumeRebuilder: React.FC<ResumeRebuilderProps> = ({
                 <>
                   <RefreshCw className="h-6 w-6" />
                   <Brain className="h-5 w-5" />
-                  <span>Rebuild Resume with AI</span>
+                  <span>{canUseTools ? 'Rebuild Resume with AI' : 'Usage Limit Reached'}</span>
                 </>
-              )}
+              <span>{canUseTools ? 'Rebuild Again' : 'Usage Limit Reached'}</span>
             </button>
 
             {/* AI Status */}

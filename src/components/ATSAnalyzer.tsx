@@ -2,21 +2,32 @@ import React, { useState, useEffect } from 'react';
 import ResumeUploader from './ResumeUploader';
 import ATSReport from './ATSReport';
 import ResumeRebuilder from './ResumeRebuilder';
+import UsageLimitBanner from './UsageLimitBanner';
 import { ATSResult } from '../types/ATS';
-import { Brain, Zap, Target, Sparkles, Cpu } from 'lucide-react';
+import { Brain, Zap, Target, Sparkles, Cpu, Settings } from 'lucide-react';
 import { geminiService } from '../services/geminiService';
+import { usageLimitService } from '../services/usageLimitService';
 
 const ATSAnalyzer: React.FC = () => {
   const [resumeFile, setResumeFile] = useState<File | null>(null);
   const [resumeText, setResumeText] = useState('');
   const [jobDescription, setJobDescription] = useState('');
+  const [customPrompt, setCustomPrompt] = useState('');
   const [atsResult, setAtsResult] = useState<ATSResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [aiAvailable, setAiAvailable] = useState(false);
+  const [canUseTools, setCanUseTools] = useState(true);
 
   useEffect(() => {
     // Check AI availability on component mount
     checkAiAvailability();
+    
+    // Subscribe to usage limit updates
+    const unsubscribe = usageLimitService.subscribe(() => {
+      setCanUseTools(usageLimitService.canUseTools());
+    });
+
+    return unsubscribe;
   }, []);
 
   const checkAiAvailability = async () => {
@@ -25,6 +36,12 @@ const ATSAnalyzer: React.FC = () => {
   };
 
   const handleAnalyze = async () => {
+    // Check usage limit first
+    if (!usageLimitService.canUseTools()) {
+      alert('You have reached your free usage limit. Please wait for the reset time.');
+      return;
+    }
+
     let finalResumeText = resumeText;
 
     // If file is uploaded, try to extract text from it
@@ -49,13 +66,19 @@ const ATSAnalyzer: React.FC = () => {
       return;
     }
 
+    // Use one tool attempt
+    if (!usageLimitService.useOneTool()) {
+      alert('You have reached your free usage limit. Please wait for the reset time.');
+      return;
+    }
+
     setLoading(true);
     
     try {
       console.log('🚀 Starting AI-powered ATS analysis...');
       
       // Call AI service
-      const result = await geminiService.analyzeResume(finalResumeText, jobDescription);
+      const result = await geminiService.analyzeResume(finalResumeText, jobDescription, customPrompt);
       
       console.log('✅ Analysis complete!');
       setAtsResult(result);
@@ -113,6 +136,9 @@ const ATSAnalyzer: React.FC = () => {
         </div>
       </div>
 
+      {/* Usage Limit Banner */}
+      <UsageLimitBanner toolName="ATS Analyzer" />
+
       <div className="bg-white rounded-2xl shadow-2xl p-8 border border-gray-100">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div className="space-y-6">
@@ -146,6 +172,7 @@ Experience:
 Education: Bachelor's in Computer Science"
                 rows={10}
                 className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 resize-none"
+                disabled={!canUseTools}
               />
               <p className="text-xs text-gray-500 mt-2 bg-purple-50 p-2 rounded-lg">
                 💡 Our AI can extract text from your uploaded PDF/Word document automatically. This field is only needed if you want to override the extracted content.
@@ -183,10 +210,25 @@ Requirements:
 - Strong problem-solving skills"
                 rows={12}
                 className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 resize-none"
+                disabled={!canUseTools}
                 required
               />
               <p className="text-xs text-gray-500 mt-2 bg-purple-50 p-2 rounded-lg">
                 📝 Include the complete job description with requirements, skills, and qualifications for the most accurate analysis
+              </p>
+            </div>
+
+            {/* Custom Prompt Section */}
+            <div>
+              <label className="flex items-center space-x-2 text-sm font-semibold text-gray-700 mb-3">
+                <Settings className="h-5 w-5 text-indigo-500" />
+                placeholder="Add your custom instructions for the AI analysis...
+                rows={4}
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 resize-none"
+                disabled={!canUseTools}
+              />
+              <p className="text-xs text-gray-500 mt-2 bg-indigo-50 p-2 rounded-lg">
+                🎯 Customize how the AI analyzes your resume. If left empty, we'll use our optimized default prompt.
               </p>
             </div>
           </div>
@@ -195,7 +237,7 @@ Requirements:
         <div className="mt-8 flex justify-center">
           <button
             onClick={handleAnalyze}
-            disabled={loading || (!resumeFile && !resumeText) || !jobDescription}
+            disabled={loading || (!resumeFile && !resumeText) || !jobDescription || !canUseTools}
             className="px-12 py-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-2xl hover:from-purple-700 hover:to-blue-700 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed transition-all duration-300 flex items-center space-x-3 shadow-xl hover:shadow-2xl transform hover:scale-105 disabled:transform-none text-lg font-semibold"
           >
             {loading ? (
@@ -207,7 +249,7 @@ Requirements:
               <>
                 <Brain className="h-6 w-6" />
                 <Sparkles className="h-5 w-5" />
-                <span>Analyze with AI</span>
+                <span>{canUseTools ? 'Analyze with AI' : 'Usage Limit Reached'}</span>
               </>
             )}
           </button>
