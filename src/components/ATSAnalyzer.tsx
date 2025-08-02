@@ -3,7 +3,7 @@ import { Upload, FileText, Sparkles, AlertCircle } from 'lucide-react';
 import { analyzeResume } from '../services/geminiService';
 import ATSReport from './ATSReport';
 import ResumeRebuilder from './ResumeRebuilder';
-import { UsageLimitBanner } from './UsageLimitBanner';
+import UsageLimitBanner from './UsageLimitBanner';
 import { usageLimitService } from '../services/usageLimitService';
 
 export const ATSAnalyzer: React.FC = () => {
