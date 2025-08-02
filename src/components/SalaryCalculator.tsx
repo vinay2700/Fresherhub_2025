@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { DollarSign, MapPin, Clock, Briefcase, TrendingUp, Brain, Calculator, Sparkles, Target, Building, GraduationCap, Award } from 'lucide-react';
 import { geminiService } from '../services/geminiService';
-import { usageLimitService } from '../services/usageLimitService';
-import UsageLimitBanner from './UsageLimitBanner';
 
 interface SalaryData {
   jobRole: string;
@@ -51,7 +49,6 @@ const SalaryCalculator: React.FC = () => {
   const [result, setResult] = useState<SalaryResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [aiAvailable, setAiAvailable] = useState(false);
-  const [canUseTools, setCanUseTools] = useState(true);
 
   const experienceLevels = [
     'Fresher',
@@ -106,13 +103,6 @@ const SalaryCalculator: React.FC = () => {
   useEffect(() => {
     // Check AI availability on component mount
     checkAiAvailability();
-    
-    // Subscribe to usage limit updates
-    const unsubscribe = usageLimitService.subscribe(() => {
-      setCanUseTools(usageLimitService.canUseTools());
-    });
-
-    return unsubscribe;
   }, []);
 
   const checkAiAvailability = async () => {
@@ -121,20 +111,8 @@ const SalaryCalculator: React.FC = () => {
   };
 
   const handleCalculate = async () => {
-    // Check usage limit first
-    if (!usageLimitService.canUseTools()) {
-      alert('You have reached your free usage limit. Please wait for the reset time.');
-      return;
-    }
-
     if (!formData.jobRole || !formData.location) {
       alert('Please fill in at least the job role and location');
-      return;
-    }
-
-    // Use one tool attempt
-    if (!usageLimitService.useOneTool()) {
-      alert('You have reached your free usage limit. Please wait for the reset time.');
       return;
     }
 
@@ -192,9 +170,6 @@ const SalaryCalculator: React.FC = () => {
         </div>
       </div>
 
-      {/* Usage Limit Banner */}
-      <UsageLimitBanner toolName="Salary Calculator" />
-
       {/* Calculator Form */}
       <div className="bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden">
         <div className="bg-gradient-to-r from-gray-50 to-gray-100 p-6 border-b border-gray-200">
@@ -219,7 +194,6 @@ const SalaryCalculator: React.FC = () => {
                 onChange={(e) => handleInputChange('jobRole', e.target.value)}
                 placeholder="e.g., Frontend Developer, Data Scientist, Product Manager, Marketing Specialist"
                 className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                disabled={!canUseTools}
               />
             </div>
 
@@ -235,7 +209,6 @@ const SalaryCalculator: React.FC = () => {
                 onChange={(e) => handleInputChange('location', e.target.value)}
                 placeholder="e.g., Bangalore, Mumbai, Delhi, Hyderabad, Pune"
                 className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                disabled={!canUseTools}
               />
             </div>
 
@@ -343,7 +316,7 @@ const SalaryCalculator: React.FC = () => {
           <div className="mt-8 flex justify-center">
             <button
               onClick={handleCalculate}
-              disabled={loading || !formData.jobRole || !formData.location || !canUseTools}
+              disabled={loading || !formData.jobRole || !formData.location}
               className="px-12 py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-2xl hover:from-green-700 hover:to-emerald-700 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed transition-all duration-300 flex items-center space-x-3 shadow-xl hover:shadow-2xl transform hover:scale-105 disabled:transform-none text-lg font-semibold"
             >
               {loading ? (
@@ -355,7 +328,7 @@ const SalaryCalculator: React.FC = () => {
                 <>
                   <Calculator className="h-6 w-6" />
                   <Brain className="h-5 w-5" />
-                  <span>{canUseTools ? 'Calculate with AI' : 'Usage Limit Reached'}</span>
+                  <span>Calculate with AI</span>
                 </>
               )}
             </button>

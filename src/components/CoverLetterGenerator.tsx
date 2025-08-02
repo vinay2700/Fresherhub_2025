@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Mail, FileText, Download, Brain, Sparkles, User, Building, CheckCircle, Wand2, Upload, X, Settings } from 'lucide-react';
+import { Mail, FileText, Download, Brain, Sparkles, User, Building, CheckCircle, Wand2, Upload, X } from 'lucide-react';
 import { geminiService } from '../services/geminiService';
-import { usageLimitService } from '../services/usageLimitService';
-import UsageLimitBanner from './UsageLimitBanner';
 
 interface CoverLetterData {
   resumeText: string;
@@ -11,7 +9,6 @@ interface CoverLetterData {
   jobTitle: string;
   companyName: string;
   generationType: 'cover' | 'email' | 'both';
-  customPrompt?: string;
 }
 
 interface GeneratedContent {
@@ -30,8 +27,7 @@ const CoverLetterGenerator: React.FC = () => {
     candidateName: '',
     jobTitle: '',
     companyName: '',
-    generationType: 'both',
-    customPrompt: ''
+    generationType: 'both'
   });
 
   const [generatedContent, setGeneratedContent] = useState<GeneratedContent | null>(null);
@@ -39,18 +35,10 @@ const CoverLetterGenerator: React.FC = () => {
   const [aiAvailable, setAiAvailable] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [previewType, setPreviewType] = useState<'cover' | 'email'>('cover');
-  const [canUseTools, setCanUseTools] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     checkAiAvailability();
-    
-    // Subscribe to usage limit updates
-    const unsubscribe = usageLimitService.subscribe(() => {
-      setCanUseTools(usageLimitService.canUseTools());
-    });
-
-    return unsubscribe;
   }, []);
 
   const checkAiAvailability = async () => {
@@ -110,12 +98,6 @@ const CoverLetterGenerator: React.FC = () => {
   };
 
   const handleGenerate = async () => {
-    // Check usage limit first
-    if (!usageLimitService.canUseTools()) {
-      alert('You have reached your free usage limit. Please wait for the reset time.');
-      return;
-    }
-
     let finalResumeText = formData.resumeText;
 
     // Extract text from uploaded file if available
@@ -131,12 +113,6 @@ const CoverLetterGenerator: React.FC = () => {
 
     if (!finalResumeText || !formData.jobDescription || !formData.candidateName) {
       alert('Please provide: Resume (file or text), Job Description, and Your Name');
-      return;
-    }
-
-    // Use one tool attempt
-    if (!usageLimitService.useOneTool()) {
-      alert('You have reached your free usage limit. Please wait for the reset time.');
       return;
     }
 
@@ -308,9 +284,6 @@ const CoverLetterGenerator: React.FC = () => {
         </div>
       </div>
 
-      {/* Usage Limit Banner */}
-      <UsageLimitBanner toolName="Cover Letter Generator" />
-
       {/* Input Form */}
       {!generatedContent && (
         <div className="bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden">
@@ -336,7 +309,6 @@ const CoverLetterGenerator: React.FC = () => {
                   onChange={(e) => setFormData({ ...formData, candidateName: e.target.value })}
                   placeholder="e.g., John Doe"
                   className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                  disabled={!canUseTools}
                   required
                 />
               </div>
@@ -352,7 +324,6 @@ const CoverLetterGenerator: React.FC = () => {
                   onChange={(e) => setFormData({ ...formData, jobTitle: e.target.value })}
                   placeholder="e.g., Frontend Developer"
                   className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                  disabled={!canUseTools}
                 />
               </div>
 
@@ -367,7 +338,6 @@ const CoverLetterGenerator: React.FC = () => {
                   onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
                   placeholder="e.g., TechCorp Solutions"
                   className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                  disabled={!canUseTools}
                 />
               </div>
             </div>
@@ -513,7 +483,6 @@ What We Offer:
 - Learning opportunities"
                 rows={10}
                 className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 resize-none"
-                disabled={!canUseTools}
                 required
               />
               <p className="text-xs text-gray-500 mt-2 bg-purple-50 p-2 rounded-lg">
@@ -521,40 +490,11 @@ What We Offer:
               </p>
             </div>
 
-            {/* Custom Prompt Section */}
-            <div>
-              <label className="flex items-center space-x-2 text-sm font-semibold text-gray-700 mb-3">
-                <Settings className="h-5 w-5 text-indigo-500" />
-                <span>Custom Generation Prompt (Optional)</span>
-              </label>
-              <textarea
-                value={formData.customPrompt}
-                onChange={(e) => setFormData({ ...formData, customPrompt: e.target.value })}
-                placeholder="Add your custom instructions for content generation...
-
-Examples:
-- Make the tone more formal/casual
-- Emphasize specific achievements or skills
-- Focus on cultural fit with the company
-- Highlight remote work experience
-- Use a storytelling approach
-- Keep it concise and direct
-
-Leave empty to use our optimized default prompts."
-                rows={4}
-                className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 resize-none"
-                disabled={!canUseTools}
-              />
-              <p className="text-xs text-gray-500 mt-2 bg-indigo-50 p-2 rounded-lg">
-                🎯 Customize how the AI generates your content. If left empty, we'll use our proven templates.
-              </p>
-            </div>
-
             {/* Generate Button */}
             <div className="flex justify-center pt-6">
               <button
                 onClick={handleGenerate}
-                disabled={loading || (!resumeFile && !formData.resumeText) || !formData.jobDescription || !formData.candidateName || !canUseTools}
+                disabled={loading || (!resumeFile && !formData.resumeText) || !formData.jobDescription || !formData.candidateName}
                 className="px-12 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-2xl hover:from-indigo-700 hover:to-purple-700 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed transition-all duration-300 flex items-center space-x-3 shadow-xl hover:shadow-2xl transform hover:scale-105 disabled:transform-none text-lg font-semibold"
               >
                 {loading ? (
@@ -566,7 +506,7 @@ Leave empty to use our optimized default prompts."
                   <>
                     <Wand2 className="h-6 w-6" />
                     <Brain className="h-5 w-5" />
-                    <span>{canUseTools ? `Generate ${getGenerationTypeLabel(formData.generationType)}` : 'Usage Limit Reached'}</span>
+                    <span>Generate {getGenerationTypeLabel(formData.generationType)}</span>
                   </>
                 )}
               </button>
@@ -740,8 +680,7 @@ Leave empty to use our optimized default prompts."
                   candidateName: '',
                   jobTitle: '',
                   companyName: '',
-                  generationType: 'both',
-                  customPrompt: ''
+                  generationType: 'both'
                 });
               }}
               className="px-8 py-3 border-2 border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 hover:border-gray-400 transition-all duration-300 flex items-center space-x-2 mx-auto"

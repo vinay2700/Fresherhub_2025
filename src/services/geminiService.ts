@@ -149,8 +149,6 @@ CANDIDATE NAME: ${data.candidateName}
 JOB TITLE: ${data.jobTitle || 'the position'}
 COMPANY NAME: ${data.companyName || 'your company'}
 
-${data.customPrompt ? `CUSTOM INSTRUCTIONS: ${data.customPrompt}\n\n` : ''}
-
 ---
 
 ${generateCover ? `
@@ -161,7 +159,6 @@ ${generateCover ? `
 - Keep it short and professional (**250–300 words max**).
 - End with a strong closing and a thank you line.
 - Use proper business letter format with date, address, greeting, body, and closing.
-${data.customPrompt ? '- Follow the custom instructions provided above.' : ''}
 
 ---
 ` : ''}
@@ -175,7 +172,6 @@ ${generateEmail ? `
 - Politely ask for an update or chance to discuss further.
 - Keep the email between **200-300 words**.
 - Use a clear, polite, professional tone.
-${data.customPrompt ? '- Follow the custom instructions provided above.' : ''}
 
 ---
 ` : ''}
@@ -202,7 +198,6 @@ IMPORTANT GUIDELINES:
 - Make the content compelling and personalized
 - Keep within specified word limits
 ${generateEmail ? '- For cold email, aim for 200-300 words to provide more detail while remaining professional' : ''}
-${data.customPrompt ? '- Incorporate the custom instructions naturally into the content' : ''}
 `;
   }
 
@@ -313,8 +308,6 @@ ${candidateName}`;
   }
 
   async analyzeResume(resumeText: string, jobDescription: string): Promise<ATSResult> {
-  }
-  async analyzeResume(resumeText: string, jobDescription: string, customPrompt?: string): Promise<ATSResult> {
     // Ensure we have the latest API key
     await this.initializeGemini();
 
@@ -324,7 +317,7 @@ ${candidateName}`;
     }
 
     try {
-      const prompt = this.createATSPrompt(resumeText, jobDescription, customPrompt);
+      const prompt = this.createATSPrompt(resumeText, jobDescription);
       
       console.log('🤖 Sending request to Gemini 2.0 Flash...');
       const result = await this.model.generateContent(prompt);
@@ -711,8 +704,8 @@ Provide realistic salary figures based on current market data. Be specific and a
     };
   }
 
-  private createATSPrompt(resumeText: string, jobDescription: string, customPrompt?: string): string {
-    const basePrompt = `
+  private createATSPrompt(resumeText: string, jobDescription: string): string {
+    return `
 You are an expert ATS (Applicant Tracking System) analyzer. Analyze the following resume against the job description and provide a detailed assessment.
 
 RESUME:
@@ -720,8 +713,6 @@ ${resumeText}
 
 JOB DESCRIPTION:
 ${jobDescription}
-
-${customPrompt ? `CUSTOM INSTRUCTIONS: ${customPrompt}\n\n` : ''}
 
 Please provide your analysis in the following JSON format (respond ONLY with valid JSON):
 
@@ -741,14 +732,9 @@ Focus on:
 4. ATS compatibility
 5. Missing qualifications
 6. Specific actionable feedback
-${customPrompt ? '\n7. Custom requirements specified above' : ''}
 
 Provide realistic scores based on actual content analysis. Be specific and helpful in suggestions.
 `;
-
-    return `
-${basePrompt}
-    `;
   }
 
   private parseGeminiResponse(responseText: string): ATSResult {
