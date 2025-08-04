@@ -357,7 +357,6 @@ const CSVUploader: React.FC<CSVUploaderProps> = ({ onJobsAdded }) => {
               <li>• <strong>type</strong> - Job Type (Full-time, Part-time, etc.)</li>
               <li>• <strong>remote</strong> - true/false for remote work</li>
               <li>• <strong>apply_url</strong> - Application URL</li>
-              <li>• <strong>hr_email</strong> - HR/Recruiter Email (Optional)</li>
             </ul>
           </div>
         </div>

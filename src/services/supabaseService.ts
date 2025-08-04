@@ -111,8 +111,7 @@ class SupabaseService {
         source: job.source,
         type: job.type,
         remote: job.remote,
-        applyUrl: job.apply_url,
-        hrEmail: job.apply_url
+        applyUrl: job.apply_url
       }));
     } catch (error) {
       console.error('Error in getAllJobs:', error);
@@ -138,8 +137,7 @@ class SupabaseService {
           source: job.source,
           type: job.type,
           remote: job.remote,
-          apply_url: job.applyUrl,
-          hr_email: job.hrEmail
+          apply_url: job.applyUrl
         })
         .select();
 

@@ -1,30 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import JobCard from './JobCard';
-import JobDetailsModal from './JobDetailsModal';
-import HREmailModal from './HREmailModal';
 import JobFilters from './JobFilters';
 import SearchBar from './SearchBar';
 import { Job } from '../types/Job';
 import { Briefcase, TrendingUp } from 'lucide-react';
 import { supabaseService } from '../services/supabaseService';
-import { usageLimitService } from '../services/usageLimitService';
 
 interface JobBoardProps {
   searchParams?: { query?: string; location?: string };
-  onNavigateToATS?: (jobDescription?: string) => void;
-  onNavigateToCoverLetter?: (jobDescription?: string, jobTitle?: string, companyName?: string) => void;
 }
 
-const JobBoard: React.FC<JobBoardProps> = ({ searchParams, onNavigateToATS, onNavigateToCoverLetter }) => {
+const JobBoard: React.FC<JobBoardProps> = ({ searchParams }) => {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [filteredJobs, setFilteredJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState(searchParams?.query || '');
   const [selectedLocation, setSelectedLocation] = useState(searchParams?.location || '');
   const [selectedExperience, setSelectedExperience] = useState('');
-  const [selectedJob, setSelectedJob] = useState<Job | null>(null);
-  const [showHREmailModal, setShowHREmailModal] = useState(false);
-  const [hrEmailJob, setHREmailJob] = useState<Job | null>(null);
 
   useEffect(() => {
     fetchJobs();
@@ -39,39 +31,6 @@ const JobBoard: React.FC<JobBoardProps> = ({ searchParams, onNavigateToATS, onNa
         subscription.unsubscribe();
       }
     };
-
-  const handleViewJobDetails = (job: Job) => {
-    setSelectedJob(job);
-  };
-
-  const handleCloseJobDetails = () => {
-    setSelectedJob(null);
-  };
-
-  const handleGetHREmail = (job: Job) => {
-    setHREmailJob(job);
-    setShowHREmailModal(true);
-    setSelectedJob(null); // Close job details modal
-  };
-
-  const handleCloseHREmailModal = () => {
-    setShowHREmailModal(false);
-    setHREmailJob(null);
-  };
-
-  const handleAnalyzeResume = (job: Job) => {
-    setSelectedJob(null); // Close modal
-    if (onNavigateToATS) {
-      onNavigateToATS(job.description);
-    }
-  };
-
-  const handleWriteCoverLetter = (job: Job) => {
-    setSelectedJob(null); // Close modal
-    if (onNavigateToCoverLetter) {
-      onNavigateToCoverLetter(job.description, job.title, job.company);
-    }
-  };
   }, []);
 
   // Set initial search parameters from homepage
@@ -282,7 +241,7 @@ const JobBoard: React.FC<JobBoardProps> = ({ searchParams, onNavigateToATS, onNa
               
               <div className="grid gap-6">
                 {filteredJobs.map(job => (
-                  <JobCard key={job.id} job={job} onViewDetails={handleViewJobDetails} />
+                  <JobCard key={job.id} job={job} />
                 ))}
               </div>
               
@@ -312,25 +271,6 @@ const JobBoard: React.FC<JobBoardProps> = ({ searchParams, onNavigateToATS, onNa
           )}
         </main>
       </div>
-
-      {/* Job Details Modal */}
-      {selectedJob && (
-        <JobDetailsModal
-          job={selectedJob}
-          onClose={handleCloseJobDetails}
-          onGetHREmail={handleGetHREmail}
-          onAnalyzeResume={handleAnalyzeResume}
-          onWriteCoverLetter={handleWriteCoverLetter}
-        />
-      )}
-
-      {/* HR Email Modal */}
-      {showHREmailModal && hrEmailJob && (
-        <HREmailModal
-          job={hrEmailJob}
-          onClose={handleCloseHREmailModal}
-        />
-      )}
     </div>
   );
 };
