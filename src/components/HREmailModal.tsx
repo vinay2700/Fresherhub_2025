@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { X, Mail, Copy, CheckCircle, Sparkles, Send } from 'lucide-react';
 import { Job } from '../types/Job';
 import { geminiService } from '../services/geminiService';
-import { usageLimitService } from '../services/usageLimitService';
+
 
 interface HREmailModalProps {
   job: Job;
