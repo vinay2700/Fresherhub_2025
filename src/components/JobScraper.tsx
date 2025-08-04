@@ -70,7 +70,8 @@ What We Offer:
         source: jobSite,
         type: 'Full-time',
         remote: Math.random() > 0.5,
-        applyUrl: url // Use the scraped URL as the application URL
+        applyUrl: url, // Use the scraped URL as the application URL
+        hrEmail: Math.random() > 0.7 ? 'hr@company.com' : undefined // Sometimes include HR email
       };
 
       setScrapedData(mockScrapedData);

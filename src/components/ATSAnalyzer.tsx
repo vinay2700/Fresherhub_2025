@@ -17,7 +17,15 @@ const ATSAnalyzer: React.FC = () => {
   useEffect(() => {
     // Check AI availability on component mount
     checkAiAvailability();
+    
+    // Check if there's a job description from job details
+    const jobDescFromSession = sessionStorage.getItem('jobDescriptionForATS');
+    if (jobDescFromSession) {
+      setJobDescription(jobDescFromSession);
+      sessionStorage.removeItem('jobDescriptionForATS'); // Clean up
+    }
   }, []);
+
 
   const checkAiAvailability = async () => {
     const available = await geminiService.isAvailable();

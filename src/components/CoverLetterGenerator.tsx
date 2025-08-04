@@ -39,6 +39,24 @@ const CoverLetterGenerator: React.FC = () => {
 
   useEffect(() => {
     checkAiAvailability();
+    
+    // Check if there's job details from job details modal
+    const jobDescFromSession = sessionStorage.getItem('jobDescriptionForCover');
+    const jobTitleFromSession = sessionStorage.getItem('jobTitleForCover');
+    const companyNameFromSession = sessionStorage.getItem('companyNameForCover');
+    
+    if (jobDescFromSession) {
+      setFormData(prev => ({ ...prev, jobDescription: jobDescFromSession }));
+      sessionStorage.removeItem('jobDescriptionForCover');
+    }
+    if (jobTitleFromSession) {
+      setFormData(prev => ({ ...prev, jobTitle: jobTitleFromSession }));
+      sessionStorage.removeItem('jobTitleForCover');
+    }
+    if (companyNameFromSession) {
+      setFormData(prev => ({ ...prev, companyName: companyNameFromSession }));
+      sessionStorage.removeItem('companyNameForCover');
+    }
   }, []);
 
   const checkAiAvailability = async () => {

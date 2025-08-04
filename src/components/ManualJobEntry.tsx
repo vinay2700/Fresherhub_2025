@@ -18,7 +18,8 @@ const ManualJobEntry: React.FC<ManualJobEntryProps> = ({ onAddJob }) => {
     source: 'Manual',
     type: 'Full-time',
     remote: false,
-    applyUrl: ''
+    applyUrl: '',
+    hrEmail: ''
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -42,7 +43,8 @@ const ManualJobEntry: React.FC<ManualJobEntryProps> = ({ onAddJob }) => {
       source: formData.source,
       type: formData.type,
       remote: formData.remote,
-      applyUrl: formData.applyUrl || undefined
+      applyUrl: formData.applyUrl || undefined,
+      hrEmail: formData.hrEmail || undefined
     };
 
     onAddJob(newJob);
@@ -59,7 +61,8 @@ const ManualJobEntry: React.FC<ManualJobEntryProps> = ({ onAddJob }) => {
       source: 'Manual',
       type: 'Full-time',
       remote: false,
-      applyUrl: ''
+      applyUrl: '',
+      hrEmail: ''
     });
 
     alert('Job added successfully!');
@@ -198,6 +201,24 @@ const ManualJobEntry: React.FC<ManualJobEntryProps> = ({ onAddJob }) => {
           />
           <p className="text-xs text-gray-500 mt-2 bg-blue-50 p-2 rounded-lg">
             💡 Enter the direct link where candidates can apply for this job. If left empty, the Apply button will show a generic message.
+          </p>
+        </div>
+
+        {/* HR Email Field */}
+        <div>
+          <label className="flex items-center space-x-2 text-sm font-semibold text-gray-700 mb-2">
+            <Mail className="h-4 w-4 text-purple-500" />
+            <span>HR Email (Optional)</span>
+          </label>
+          <input
+            type="email"
+            value={formData.hrEmail}
+            onChange={(e) => setFormData({ ...formData, hrEmail: e.target.value })}
+            placeholder="e.g., hr@company.com or recruiter@company.com"
+            className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+          />
+          <p className="text-xs text-gray-500 mt-2 bg-purple-50 p-2 rounded-lg">
+            💡 Enter the HR or recruiter's email for direct contact. This will enable the "Get HR Email" feature for job seekers.
           </p>
         </div>
 

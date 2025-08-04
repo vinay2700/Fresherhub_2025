@@ -12,4 +12,5 @@ export interface Job {
   type: string;
   remote: boolean;
   applyUrl?: string; // Optional application URL
+  hrEmail?: string; // Optional HR email
 }

@@ -1,12 +1,13 @@
 import React from 'react';
-import { MapPin, Clock, DollarSign, Building, ExternalLink, Tag, Wifi, WifiOff, AlertCircle } from 'lucide-react';
+import { MapPin, Clock, DollarSign, Building, ExternalLink, Tag, Wifi, AlertCircle, Eye, Mail } from 'lucide-react';
 import { Job } from '../types/Job';
 
 interface JobCardProps {
   job: Job;
+  onViewDetails: (job: Job) => void;
 }
 
-const JobCard: React.FC<JobCardProps> = ({ job }) => {
+const JobCard: React.FC<JobCardProps> = ({ job, onViewDetails }) => {
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const now = new Date();
@@ -88,13 +89,22 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
       <div className="flex justify-between items-center">
         <span className="text-sm text-gray-500 font-medium">{formatDate(job.postedDate)}</span>
         <div className="flex items-center space-x-3">
-          {/* Application URL Status Indicator */}
-          {!job.applyUrl && (
-            <div className="flex items-center space-x-1 text-xs text-amber-600 bg-amber-50 px-2 py-1 rounded-full">
-              <AlertCircle className="h-3 w-3" />
-              <span>Contact directly</span>
+          {/* HR Email Indicator */}
+          {job.hrEmail && (
+            <div className="flex items-center space-x-1 text-xs text-green-600 bg-green-50 px-2 py-1 rounded-full">
+              <Mail className="h-3 w-3" />
+              <span>HR Email</span>
             </div>
           )}
+          
+          {/* View Details Button */}
+          <button
+            onClick={() => onViewDetails(job)}
+            className="flex items-center space-x-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition-all duration-300"
+          >
+            <Eye className="h-4 w-4" />
+            <span className="font-medium">View Details</span>
+          </button>
           
           <button 
             onClick={handleApplyClick}
