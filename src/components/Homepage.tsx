@@ -37,7 +37,7 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
               <span className="text-2xl font-bold text-gray-900">FresherHub</span>
               
               {/* AI Tools Dropdown */}
-              <div className="relative ml-8">ge
+              <div className="relative ml-8">
                 <button
                   onClick={() => setShowAIToolsDropdown(!showAIToolsDropdown)}
                   className="flex items-center space-x-1 text-gray-700 hover:text-gray-900 font-medium"
