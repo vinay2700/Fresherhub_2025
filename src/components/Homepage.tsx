@@ -63,10 +63,9 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
       Find Jobs
     </button>
   </div>
-</div>
           
 
-            {/* Mobile Menu Button */}
+           {/* Mobile Menu Button */}
             <div className="md:hidden">
               <button className="text-gray-700 hover:text-gray-900">
                 <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
