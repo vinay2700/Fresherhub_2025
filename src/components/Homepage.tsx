@@ -93,17 +93,15 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
             </div>
 
             {/* Navigation Links - Right Side */}
-            <div className="hidden md:flex items-center space-x-8">
-              <a href="#" className="text-gray-700 hover:text-gray-900 font-medium">Home</a>
-              <button
-                onClick={() => onNavigate('jobs')}
-                className="text-gray-700 hover:text-gray-900 font-medium"
-              >
-                Find Jobs
-              </button>
-              <a href="#about" className="text-gray-700 hover:text-gray-900 font-medium">About</a>
-              <a href="#contact" className="text-gray-700 hover:text-gray-900 font-medium">Contact</a>
-            </div>
+          <div className="hidden md:flex items-center space-x-8">
+  <a href="#" className="text-gray-700 hover:text-gray-900 font-medium">Home</a>
+  <button
+    onClick={() => onNavigate('jobs')}
+    className="text-gray-700 hover:text-gray-900 font-medium"
+  >
+    Find Jobs
+  </button>
+</div>
 
             {/* Mobile Menu Button */}
             <div className="md:hidden">
