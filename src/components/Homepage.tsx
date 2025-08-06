@@ -31,24 +31,13 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
       <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            {/* Logo - Left Side */}
+            {/* Logo and AI Tools - Left Side */}
             <div className="flex items-center space-x-3">
               <Briefcase className="h-8 w-8 text-blue-600" />
               <span className="text-2xl font-bold text-gray-900">FresherHub</span>
-            </div>
-
-            {/* Navigation Links - Left Side */}
-            <div className="hidden md:flex items-center space-x-8">
-              <a href="#" className="text-gray-700 hover:text-gray-900 font-medium">Home</a>
-              <button
-                onClick={() => onNavigate('jobs')}
-                className="text-gray-700 hover:text-gray-900 font-medium"
-              >
-                Find Jobs
-              </button>
               
               {/* AI Tools Dropdown */}
-              <div className="relative">
+              <div className="relative ml-8">
                 <button
                   onClick={() => setShowAIToolsDropdown(!showAIToolsDropdown)}
                   className="flex items-center space-x-1 text-gray-700 hover:text-gray-900 font-medium"
@@ -66,7 +55,7 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
                       }}
                       className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3"
                     >
-                      <FileText className="h-5 w-5 text-purple-600" />
+                      <Sparkles className="h-5 w-5 text-purple-600" />
                       <div>
                         <div className="font-medium text-gray-900">ATS Analyser + Resume Builder</div>
                         <div className="text-sm text-gray-500">Scan & rebuild your resume with AI</div>
@@ -79,7 +68,7 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
                       }}
                       className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3"
                     >
-                      <Mail className="h-5 w-5 text-indigo-600" />
+                      <Sparkles className="h-5 w-5 text-indigo-600" />
                       <div>
                         <div className="font-medium text-gray-900">Cover Letter & Job Email Writer</div>
                         <div className="text-sm text-gray-500">AI-powered application materials</div>
@@ -92,7 +81,7 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
                       }}
                       className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3"
                     >
-                      <Calculator className="h-5 w-5 text-green-600" />
+                      <Sparkles className="h-5 w-5 text-green-600" />
                       <div>
                         <div className="font-medium text-gray-900">Salary Checker</div>
                         <div className="text-sm text-gray-500">Check fresher salaries in India</div>
@@ -101,6 +90,19 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
                   </div>
                 )}
               </div>
+            </div>
+
+            {/* Navigation Links - Right Side */}
+            <div className="hidden md:flex items-center space-x-8">
+              <a href="#" className="text-gray-700 hover:text-gray-900 font-medium">Home</a>
+              <button
+                onClick={() => onNavigate('jobs')}
+                className="text-gray-700 hover:text-gray-900 font-medium"
+              >
+                Find Jobs
+              </button>
+              <a href="#about" className="text-gray-700 hover:text-gray-900 font-medium">About</a>
+              <a href="#contact" className="text-gray-700 hover:text-gray-900 font-medium">Contact</a>
             </div>
 
             {/* Mobile Menu Button */}
@@ -119,10 +121,10 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
       <section className="bg-gradient-to-b from-blue-50 to-white py-16 lg:py-24">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-            Latest Entry-Level Jobs & Internships for Freshers in India
+            Find Entry-Level Jobs & Internships for Freshers in India
           </h1>
           <p className="text-xl text-gray-600 mb-12 max-w-3xl mx-auto">
-            Discover verified fresher jobs, off-campus drives, and paid internships.
+            India's leading job portal for freshers with AI-powered resume tools. Find entry-level jobs, internships, and off-campus drives from top companies.
           </p>
 
           {/* Job Search Bar */}
@@ -176,9 +178,8 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
             <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-8 border border-purple-200 hover:shadow-lg transition-all duration-300">
               <div className="flex items-center space-x-3 mb-4">
                 <div className="p-3 bg-purple-600 rounded-xl">
-                  <FileText className="h-6 w-6 text-white" />
+                  <Sparkles className="h-6 w-6 text-white" />
                 </div>
-                <span className="text-2xl"></span>
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">
                 Scan your resume for ATS — rebuild it instantly with AI
@@ -188,7 +189,7 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
               </p>
               <button
                 onClick={() => onNavigate('ats')}
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+                className="w-full bg-purple-600 hover:bg-purple-700 text-white px-6 py-4 rounded-lg font-semibold transition-colors text-center"
               >
                 Try Free
               </button>
@@ -198,9 +199,8 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
             <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-2xl p-8 border border-indigo-200 hover:shadow-lg transition-all duration-300">
               <div className="flex items-center space-x-3 mb-4">
                 <div className="p-3 bg-indigo-600 rounded-xl">
-                  <Mail className="h-6 w-6 text-white" />
+                  <Sparkles className="h-6 w-6 text-white" />
                 </div>
-                <span className="text-2xl"></span>
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">
                 Write a cover letter — in seconds, personalized for your job
@@ -210,7 +210,7 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
               </p>
               <button
                 onClick={() => onNavigate('cover')}
-                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-4 rounded-lg font-semibold transition-colors text-center"
               >
                 Try Free
               </button>
@@ -220,9 +220,8 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
             <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-8 border border-green-200 hover:shadow-lg transition-all duration-300">
               <div className="flex items-center space-x-3 mb-4">
                 <div className="p-3 bg-green-600 rounded-xl">
-                  <Calculator className="h-6 w-6 text-white" />
+                  <Sparkles className="h-6 w-6 text-white" />
                 </div>
-                <span className="text-2xl"></span>
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">
                 Check your fresher salary — see what you're worth
@@ -232,7 +231,7 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
               </p>
               <button
                 onClick={() => onNavigate('salary')}
-                className="w-full bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+                className="w-full bg-green-600 hover:bg-green-700 text-white px-6 py-4 rounded-lg font-semibold transition-colors text-center"
               >
                 Try Free
               </button>
@@ -278,18 +277,18 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
                 <span className="text-2xl font-bold">FresherHub</span>
               </div>
               <p className="text-gray-300 mb-4">
-                AI-powered job search platform designed specifically for freshers. 
-                Find jobs, optimize resumes, and accelerate your career.
+                India's leading job portal for freshers and entry-level professionals. 
+                Find verified jobs, internships, and use our AI-powered resume tools to land your dream career.
               </p>
             </div>
             
             <div>
               <h3 className="font-semibold text-lg mb-4">Company</h3>
               <ul className="space-y-2 text-gray-300">
-                <li><a href="#" className="hover:text-white transition-colors">About</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Privacy</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Terms</a></li>
+                <li><a href="#about" className="hover:text-white transition-colors">About</a></li>
+                <li><a href="#contact" className="hover:text-white transition-colors">Contact</a></li>
+                <li><a href="#privacy" className="hover:text-white transition-colors">Privacy</a></li>
+                <li><a href="#terms" className="hover:text-white transition-colors">Terms</a></li>
               </ul>
             </div>
             
@@ -331,6 +330,214 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
               </ul>
             </div>
           </div>
+
+          {/* About Section */}
+          <section id="about" className="mt-16 pt-16 border-t border-gray-700">
+            <div className="max-w-4xl mx-auto text-center">
+              <h2 className="text-3xl font-bold text-white mb-6">About FresherHub</h2>
+              <div className="text-gray-300 space-y-4 text-left">
+                <p>
+                  FresherHub is India's premier job portal dedicated to helping fresh graduates and entry-level professionals launch their careers. We understand the unique challenges faced by freshers in today's competitive job market and have built a platform that bridges the gap between talent and opportunity.
+                </p>
+                <p>
+                  Our comprehensive platform combines traditional job search functionality with cutting-edge AI-powered tools to give freshers every advantage in their job hunt. From ATS-optimized resume analysis to personalized cover letter generation, we provide the tools and resources needed to stand out in today's digital recruitment landscape.
+                </p>
+                <p>
+                  Since our launch, we've helped thousands of freshers across India find meaningful employment opportunities with top companies. Our curated job listings focus specifically on entry-level positions, internships, and graduate programs, ensuring that every opportunity is relevant and accessible to new graduates.
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-blue-400">10,000+</div>
+                    <div className="text-gray-400">Freshers Helped</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-green-400">500+</div>
+                    <div className="text-gray-400">Partner Companies</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-purple-400">95%</div>
+                    <div className="text-gray-400">Success Rate</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Contact Section */}
+          <section id="contact" className="mt-16 pt-16 border-t border-gray-700">
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-3xl font-bold text-white mb-6 text-center">Contact Us</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="text-gray-300">
+                  <h3 className="text-xl font-semibold text-white mb-4">Get in Touch</h3>
+                  <p className="mb-4">
+                    Have questions about our platform or need help with your job search? We're here to help! 
+                    Reach out to us and our team will get back to you within 24 hours.
+                  </p>
+                  <div className="space-y-2">
+                    <p><strong>Email:</strong> support@fresherhub.com</p>
+                    <p><strong>Phone:</strong> +91 9876543210</p>
+                    <p><strong>Address:</strong> Bangalore, Karnataka, India</p>
+                  </div>
+                </div>
+                <form className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">Name *</label>
+                    <input
+                      type="text"
+                      required
+                      className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="Your full name"
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">Email *</label>
+                      <input
+                        type="email"
+                        required
+                        className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="your@email.com"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">Phone</label>
+                      <input
+                        type="tel"
+                        className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="+91 9876543210"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">Reason for Contact *</label>
+                    <select
+                      required
+                      className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      <option value="">Select a reason</option>
+                      <option value="job-search-help">Job Search Help</option>
+                      <option value="technical-support">Technical Support</option>
+                      <option value="partnership">Partnership Inquiry</option>
+                      <option value="feedback">Feedback</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">Message</label>
+                    <textarea
+                      rows={4}
+                      className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                      placeholder="Tell us how we can help you..."
+                    ></textarea>
+                  </div>
+                  <button
+                    type="submit"
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+                  >
+                    Submit Message
+                  </button>
+                </form>
+              </div>
+            </div>
+          </section>
+
+          {/* Privacy Policy Section */}
+          <section id="privacy" className="mt-16 pt-16 border-t border-gray-700">
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-3xl font-bold text-white mb-6">Privacy Policy</h2>
+              <div className="text-gray-300 space-y-6">
+                <div>
+                  <h3 className="text-xl font-semibold text-white mb-3">Information We Collect</h3>
+                  <p>
+                    At FresherHub, we collect information you provide directly to us, such as when you create an account, 
+                    upload your resume, use our AI tools, or contact us for support. This may include your name, email address, 
+                    phone number, resume content, and job preferences.
+                  </p>
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-white mb-3">How We Use Your Information</h3>
+                  <ul className="list-disc list-inside space-y-2">
+                    <li>To provide and improve our job search and AI-powered resume services</li>
+                    <li>To match you with relevant job opportunities</li>
+                    <li>To communicate with you about our services and job opportunities</li>
+                    <li>To analyze usage patterns and improve our platform</li>
+                    <li>To ensure the security and integrity of our services</li>
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-white mb-3">Data Security</h3>
+                  <p>
+                    We implement appropriate technical and organizational measures to protect your personal information 
+                    against unauthorized access, alteration, disclosure, or destruction. Your resume data and personal 
+                    information are encrypted and stored securely.
+                  </p>
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-white mb-3">Contact Us</h3>
+                  <p>
+                    If you have any questions about this Privacy Policy, please contact us at privacy@fresherhub.com 
+                    or through our contact form above.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Terms of Service Section */}
+          <section id="terms" className="mt-16 pt-16 border-t border-gray-700">
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-3xl font-bold text-white mb-6">Terms of Service</h2>
+              <div className="text-gray-300 space-y-6">
+                <div>
+                  <h3 className="text-xl font-semibold text-white mb-3">Acceptance of Terms</h3>
+                  <p>
+                    By accessing and using FresherHub, you accept and agree to be bound by the terms and provision 
+                    of this agreement. If you do not agree to abide by the above, please do not use this service.
+                  </p>
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-white mb-3">Use License</h3>
+                  <p>
+                    Permission is granted to temporarily use FresherHub for personal, non-commercial job search purposes. 
+                    This includes using our AI-powered resume tools, browsing job listings, and applying to positions 
+                    through our platform.
+                  </p>
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-white mb-3">User Responsibilities</h3>
+                  <ul className="list-disc list-inside space-y-2">
+                    <li>Provide accurate and truthful information in your profile and resume</li>
+                    <li>Use our AI tools responsibly and not attempt to abuse or exploit them</li>
+                    <li>Respect the intellectual property rights of others</li>
+                    <li>Not use the platform for any illegal or unauthorized purpose</li>
+                    <li>Maintain the confidentiality of your account credentials</li>
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-white mb-3">AI Tools Usage</h3>
+                  <p>
+                    Our AI-powered tools (ATS Analyzer, Resume Builder, Cover Letter Generator, Salary Calculator) 
+                    are provided to assist in your job search. While we strive for accuracy, results should be 
+                    reviewed and customized as needed. Usage limits may apply to ensure fair access for all users.
+                  </p>
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-white mb-3">Limitation of Liability</h3>
+                  <p>
+                    FresherHub shall not be liable for any indirect, incidental, special, consequential, or punitive 
+                    damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses.
+                  </p>
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-white mb-3">Contact Information</h3>
+                  <p>
+                    Questions about the Terms of Service should be sent to us at legal@fresherhub.com.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
         </div>
       </footer>
 
