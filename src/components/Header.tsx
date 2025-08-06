@@ -13,13 +13,11 @@ const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab, isAdmin, setIs
   const [showMobileMenu, setShowMobileMenu] = useState(false);
 
   useEffect(() => {
-    // Check if admin is logged in from localStorage
     const adminLoggedIn = localStorage.getItem('admin_logged_in') === 'true';
     if (adminLoggedIn) {
       setIsAdmin(true);
     }
 
-    // Listen for admin navigation events
     const handleAdminNavigation = () => {
       setIsAdmin(true);
       setActiveTab('admin');
@@ -169,7 +167,6 @@ const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab, isAdmin, setIs
           
           {/* Right side - Desktop Admin logout + Mobile Menu Button */}
           <div className="flex items-center space-x-4">
-            {/* Desktop Admin Logout */}
             {isAdmin && (
               <button 
                 onClick={handleLogout}
@@ -180,7 +177,6 @@ const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab, isAdmin, setIs
               </button>
             )}
 
-            {/* Mobile Menu Button */}
             <button
               onClick={() => setShowMobileMenu(!showMobileMenu)}
               className="lg:hidden p-3 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -283,7 +279,6 @@ const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab, isAdmin, setIs
                 )}
               </div>
 
-              {/* Mobile Admin Section */}
               {isAdmin && (
                 <>
                   <button
