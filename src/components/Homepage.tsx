@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, MapPin, ChevronDown, FileText, Mail, Calculator, Briefcase, Users, Shield, CheckCircle, Zap, DollarSign, Target } from 'lucide-react';
+import { Search, MapPin, ChevronDown, FileText, Mail, Calculator, Briefcase, Users, Shield, CheckCircle, Zap, DollarSign, Target, Sparkles } from 'lucide-react';
 
 interface HomepageProps {
   onNavigate: (tab: 'jobs' | 'ats' | 'cover' | 'salary', searchParams?: { query?: string; location?: string }) => void;
