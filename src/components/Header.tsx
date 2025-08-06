@@ -53,7 +53,8 @@ const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab, isAdmin, setIs
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           {/* Left side - Logo and Desktop Navigation */}
-          <div className="flex items-center space-x-8">
+          <div className="flex items-center justify-between space-x-4 flex-nowrap w-full overflow-x-auto">
+
             <button 
               onClick={() => handleNavigation('home')}
               className="flex items-center space-x-3 hover:opacity-80 transition-opacity"
