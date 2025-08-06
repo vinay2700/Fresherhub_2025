@@ -30,77 +30,40 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
       {/* Top Navigation */}
       <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center h-16 space-x-8">
-            {/* Logo and AI Tools - Left Side */}
-            <div className="flex items-center space-x-3">
-              <Briefcase className="h-8 w-8 text-blue-600" />
-              <span className="text-2xl font-bold text-gray-900">FresherHub</span>
-              
-              {/* AI Tools Dropdown */}
-              <div className="relative ml-8">
-                <button
-                  onClick={() => setShowAIToolsDropdown(!showAIToolsDropdown)}
-                  className="flex items-center space-x-1 text-gray-700 hover:text-gray-900 font-medium"
-                >
-                  <span>AI Tools</span>
-                  <ChevronDown className="h-4 w-4" />
-                </button>
-                
-                {showAIToolsDropdown && (
-                  <div className="absolute top-full left-0 mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50">
-                    <button
-                      onClick={() => {
-                        onNavigate('ats');
-                        setShowAIToolsDropdown(false);
-                      }}
-                      className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3"
-                    >
-                      <Sparkles className="h-5 w-5 text-purple-600" />
-                      <div>
-                        <div className="font-medium text-gray-900">ATS Analyser + Resume Builder</div>
-                        <div className="text-sm text-gray-500">Scan & rebuild your resume with AI</div>
-                      </div>
-                    </button>
-                    <button
-                      onClick={() => {
-                        onNavigate('cover');
-                        setShowAIToolsDropdown(false);
-                      }}
-                      className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3"
-                    >
-                      <Sparkles className="h-5 w-5 text-indigo-600" />
-                      <div>
-                        <div className="font-medium text-gray-900">Cover Letter & Job Email Writer</div>
-                        <div className="text-sm text-gray-500">AI-powered application materials</div>
-                      </div>
-                    </button>
-                    <button
-                      onClick={() => {
-                        onNavigate('salary');
-                        setShowAIToolsDropdown(false);
-                      }}
-                      className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3"
-                    >
-                      <Sparkles className="h-5 w-5 text-green-600" />
-                      <div>
-                        <div className="font-medium text-gray-900">Salary Checker</div>
-                        <div className="text-sm text-gray-500">Check fresher salaries in India</div>
-                      </div>
-                    </button>
-                  </div>
-                )}
-              </div>
-            </div>
+ <div className="flex justify-between items-center h-16">
+  <div className="flex items-center space-x-8">
+    {/* Logo */}
+    <div className="flex items-center space-x-3">
+      <Briefcase className="h-8 w-8 text-blue-600" />
+      <span className="text-2xl font-bold text-gray-900">FresherHub</span>
+    </div>
 
-            {/* Navigation Links - Right Side */}
-          <div className="hidden md:flex items-center space-x-8">
-  <a href="#" className="text-gray-700 hover:text-gray-900 font-medium">Home</a>
-  <button
-    onClick={() => onNavigate('jobs')}
-    className="text-gray-700 hover:text-gray-900 font-medium"
-  >
-    Find Jobs
-  </button>
+    {/* All Navigation Links */}
+    <div className="hidden md:flex items-center space-x-8">
+      <a href="#" className="text-gray-700 hover:text-gray-900 font-medium">Home</a>
+      <button
+        onClick={() => onNavigate('jobs')}
+        className="text-gray-700 hover:text-gray-900 font-medium"
+      >
+        Find Jobs
+      </button>
+      {/* AI Tools Dropdown */}
+      <div className="relative">
+        <button
+          onClick={() => setShowAIToolsDropdown(!showAIToolsDropdown)}
+          className="flex items-center space-x-1 text-gray-700 hover:text-gray-900 font-medium"
+        >
+          <span>AI Tools</span>
+          <ChevronDown className="h-4 w-4" />
+        </button>
+        {showAIToolsDropdown && (
+          <div className="absolute top-full left-0 mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50">
+            {/* ... dropdown content ... */}
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
 </div>
 
             {/* Mobile Menu Button */}
