@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { RefreshCw, Download, Sparkles, Brain, FileText, Zap, CheckCircle, AlertCircle, Wand2 } from 'lucide-react';
+import { usageLimitService } from '../services/usageLimitService';
 import { geminiService } from '../services/geminiService';
 import { ATSResult } from '../types/ATS';
 
@@ -24,10 +25,26 @@ const ResumeRebuilder: React.FC<ResumeRebuilderProps> = ({
   const [rebuiltResume, setRebuiltResume] = useState<RebuiltResume | null>(null);
   const [loading, setLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
+  const [customPrompt, setCustomPrompt] = useState('');
+  const [canUseAI, setCanUseAI] = useState(true);
+
+  React.useEffect(() => {
+    const unsubscribe = usageLimitService.subscribe(({ isLimited }) => {
+      setCanUseAI(!isLimited);
+    });
+
+    return unsubscribe;
+  }, []);
 
   const handleRebuildResume = async () => {
     if (!originalResume) {
       alert('Please provide your original resume content');
+      return;
+    }
+
+    // Check usage limit
+    if (!usageLimitService.canUseAI()) {
+      alert('You have reached your free usage limit. Please wait for the reset time.');
       return;
     }
 
@@ -36,7 +53,10 @@ const ResumeRebuilder: React.FC<ResumeRebuilderProps> = ({
     try {
       console.log('🚀 Starting AI-powered resume rebuilding...');
       
-      const result = await geminiService.rebuildResume(originalResume, jobDescription, atsResult);
+      const result = await geminiService.rebuildResume(originalResume, jobDescription, atsResult, customPrompt.trim() || undefined);
+      
+      // Use AI quota
+      usageLimitService.useAI();
       setRebuiltResume(result);
       setShowPreview(true);
       
@@ -220,9 +240,24 @@ const ResumeRebuilder: React.FC<ResumeRebuilderProps> = ({
               </div>
             </div>
 
+            {/* Custom Prompt Section */}
+            <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-6 mb-6 border border-blue-200">
+              <label className="flex items-center space-x-2 text-sm font-semibold text-gray-700 mb-3">
+                <Sparkles className="h-5 w-5 text-yellow-500" />
+                <span>Custom Instructions (Optional)</span>
+              </label>
+              <textarea
+                value={customPrompt}
+                onChange={(e) => setCustomPrompt(e.target.value)}
+                placeholder="Add any specific instructions for the AI resume rebuilding (optional)..."
+                rows={3}
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 resize-none"
+              />
+            </div>
+
             <button
               onClick={handleRebuildResume}
-              disabled={loading}
+              disabled={loading || !canUseAI}
               className="px-12 py-4 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-2xl hover:from-emerald-700 hover:to-teal-700 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed transition-all duration-300 flex items-center space-x-3 shadow-xl hover:shadow-2xl transform hover:scale-105 disabled:transform-none text-lg font-semibold mx-auto"
             >
               {loading ? (

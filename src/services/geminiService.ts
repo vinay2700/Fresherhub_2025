@@ -99,7 +99,7 @@ class GeminiService {
     }
   }
 
-  async generateCoverLetterAndEmail(data: CoverLetterData): Promise<GeneratedContent> {
+  async generateCoverLetterAndEmail(data: CoverLetterData, customPrompt?: string): Promise<GeneratedContent> {
     // Ensure we have the latest API key
     await this.initializeGemini();
 
@@ -109,7 +109,7 @@ class GeminiService {
     }
 
     try {
-      const prompt = this.createCoverLetterPrompt(data);
+      const prompt = this.createCoverLetterPrompt(data, customPrompt);
       
       console.log('🤖 Sending cover letter generation request to Gemini 2.0 Flash...');
       const result = await this.model.generateContent(prompt);
@@ -124,7 +124,7 @@ class GeminiService {
     }
   }
 
-  private createCoverLetterPrompt(data: CoverLetterData): string {
+  private createCoverLetterPrompt(data: CoverLetterData, customPrompt?: string): string {
     const generateCover = data.generationType === 'cover' || data.generationType === 'both';
     const generateEmail = data.generationType === 'email' || data.generationType === 'both';
 
@@ -150,6 +150,13 @@ JOB TITLE: ${data.jobTitle || 'the position'}
 COMPANY NAME: ${data.companyName || 'your company'}
 
 ---
+
+${customPrompt ? `
+**CUSTOM INSTRUCTIONS:**
+${customPrompt}
+
+---
+` : ''}
 
 ${generateCover ? `
 **Cover Letter Requirements:**
@@ -307,7 +314,7 @@ ${candidateName}`;
     };
   }
 
-  async analyzeResume(resumeText: string, jobDescription: string): Promise<ATSResult> {
+  async analyzeResume(resumeText: string, jobDescription: string, customPrompt?: string): Promise<ATSResult> {
     // Ensure we have the latest API key
     await this.initializeGemini();
 
@@ -317,7 +324,7 @@ ${candidateName}`;
     }
 
     try {
-      const prompt = this.createATSPrompt(resumeText, jobDescription);
+      const prompt = this.createATSPrompt(resumeText, jobDescription, customPrompt);
       
       console.log('🤖 Sending request to Gemini 2.0 Flash...');
       const result = await this.model.generateContent(prompt);
@@ -332,7 +339,7 @@ ${candidateName}`;
     }
   }
 
-  async rebuildResume(originalResume: string, jobDescription: string, atsResult: ATSResult): Promise<RebuiltResume> {
+  async rebuildResume(originalResume: string, jobDescription: string, atsResult: ATSResult, customPrompt?: string): Promise<RebuiltResume> {
     // Ensure we have the latest API key
     await this.initializeGemini();
 
@@ -342,7 +349,7 @@ ${candidateName}`;
     }
 
     try {
-      const prompt = this.createResumeRebuildPrompt(originalResume, jobDescription, atsResult);
+      const prompt = this.createResumeRebuildPrompt(originalResume, jobDescription, atsResult, customPrompt);
       
       console.log('🤖 Sending resume rebuild request to Gemini 2.0 Flash...');
       const result = await this.model.generateContent(prompt);
@@ -357,7 +364,7 @@ ${candidateName}`;
     }
   }
 
-  private createResumeRebuildPrompt(originalResume: string, jobDescription: string, atsResult: ATSResult): string {
+  private createResumeRebuildPrompt(originalResume: string, jobDescription: string, atsResult: ATSResult, customPrompt?: string): string {
     return `
 You are an expert resume writer and ATS optimization specialist. Rebuild the following resume to maximize ATS compatibility and job match score.
 
@@ -372,6 +379,12 @@ CURRENT ATS ANALYSIS:
 - Missing Keywords: ${atsResult.missingKeywords.join(', ')}
 - Suggestions: ${atsResult.suggestions.join('; ')}
 - Areas for Improvement: ${atsResult.improvements.join('; ')}
+
+${customPrompt ? `
+CUSTOM INSTRUCTIONS:
+${customPrompt}
+
+` : ''}
 
 REBUILD REQUIREMENTS:
 1. Maintain all original factual information (names, dates, companies, etc.)
@@ -704,7 +717,7 @@ Provide realistic salary figures based on current market data. Be specific and a
     };
   }
 
-  private createATSPrompt(resumeText: string, jobDescription: string): string {
+  private createATSPrompt(resumeText: string, jobDescription: string, customPrompt?: string): string {
     return `
 You are an expert ATS (Applicant Tracking System) analyzer. Analyze the following resume against the job description and provide a detailed assessment.
 
@@ -713,6 +726,12 @@ ${resumeText}
 
 JOB DESCRIPTION:
 ${jobDescription}
+
+${customPrompt ? `
+CUSTOM INSTRUCTIONS:
+${customPrompt}
+
+` : ''}
 
 Please provide your analysis in the following JSON format (respond ONLY with valid JSON):
 

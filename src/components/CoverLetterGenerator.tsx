@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Mail, FileText, Download, Brain, Sparkles, User, Building, CheckCircle, Wand2, Upload, X } from 'lucide-react';
+import UsageLimitBanner from './UsageLimitBanner';
 import { geminiService } from '../services/geminiService';
+import { usageLimitService } from '../services/usageLimitService';
 
 interface CoverLetterData {
   resumeText: string;
@@ -33,12 +35,22 @@ const CoverLetterGenerator: React.FC = () => {
   const [generatedContent, setGeneratedContent] = useState<GeneratedContent | null>(null);
   const [loading, setLoading] = useState(false);
   const [aiAvailable, setAiAvailable] = useState(false);
+  const [customPrompt, setCustomPrompt] = useState('');
+  const [canUseAI, setCanUseAI] = useState(true);
   const [showPreview, setShowPreview] = useState(false);
   const [previewType, setPreviewType] = useState<'cover' | 'email'>('cover');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     checkAiAvailability();
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = usageLimitService.subscribe(({ isLimited }) => {
+      setCanUseAI(!isLimited);
+    });
+
+    return unsubscribe;
   }, []);
 
   const checkAiAvailability = async () => {
@@ -116,6 +128,12 @@ const CoverLetterGenerator: React.FC = () => {
       return;
     }
 
+    // Check usage limit
+    if (!usageLimitService.canUseAI()) {
+      alert('You have reached your free usage limit. Please wait for the reset time.');
+      return;
+    }
+
     setLoading(true);
     
     try {
@@ -126,7 +144,14 @@ const CoverLetterGenerator: React.FC = () => {
         resumeText: finalResumeText
       };
       
-      const result = await geminiService.generateCoverLetterAndEmail(dataToSend);
+      const result = await geminiService.generateCoverLetterAndEmail(
+        dataToSend,
+        customPrompt.trim() || undefined
+      );
+      
+      // Use AI quota
+      usageLimitService.useAI();
+      
       setGeneratedContent(result);
       setShowPreview(true);
       
@@ -284,6 +309,9 @@ const CoverLetterGenerator: React.FC = () => {
         </div>
       </div>
 
+      {/* Usage Limit Banner */}
+      <UsageLimitBanner toolName="Cover Letter Generator" />
+
       {/* Input Form */}
       {!generatedContent && (
         <div className="bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden">
@@ -370,6 +398,21 @@ const CoverLetterGenerator: React.FC = () => {
                   </button>
                 ))}
               </div>
+            </div>
+
+            {/* Custom Prompt Section */}
+            <div>
+              <label className="flex items-center space-x-2 text-sm font-semibold text-gray-700 mb-3">
+                <Sparkles className="h-5 w-5 text-yellow-500" />
+                <span>Custom Instructions (Optional)</span>
+              </label>
+              <textarea
+                value={customPrompt}
+                onChange={(e) => setCustomPrompt(e.target.value)}
+                placeholder="Add any specific instructions for the AI generation (optional)..."
+                rows={3}
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 resize-none"
+              />
             </div>
 
             {/* Resume Upload */}
@@ -494,7 +537,7 @@ What We Offer:
             <div className="flex justify-center pt-6">
               <button
                 onClick={handleGenerate}
-                disabled={loading || (!resumeFile && !formData.resumeText) || !formData.jobDescription || !formData.candidateName}
+                disabled={loading || (!resumeFile && !formData.resumeText) || !formData.jobDescription || !formData.candidateName || !canUseAI}
                 className="px-12 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-2xl hover:from-indigo-700 hover:to-purple-700 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed transition-all duration-300 flex items-center space-x-3 shadow-xl hover:shadow-2xl transform hover:scale-105 disabled:transform-none text-lg font-semibold"
               >
                 {loading ? (
@@ -676,6 +719,7 @@ What We Offer:
                 setResumeFile(null);
                 setFormData({
                   resumeText: '',
+                  customPrompt: '',
                   jobDescription: '',
                   candidateName: '',
                   jobTitle: '',

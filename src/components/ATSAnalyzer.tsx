@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import ResumeUploader from './ResumeUploader';
+import UsageLimitBanner from './UsageLimitBanner';
 import ATSReport from './ATSReport';
 import ResumeRebuilder from './ResumeRebuilder';
 import { ATSResult } from '../types/ATS';
 import { Brain, Zap, Target, Sparkles, Cpu } from 'lucide-react';
 import { geminiService } from '../services/geminiService';
+import { usageLimitService } from '../services/usageLimitService';
 
 const ATSAnalyzer: React.FC = () => {
   const [resumeFile, setResumeFile] = useState<File | null>(null);
@@ -13,10 +15,20 @@ const ATSAnalyzer: React.FC = () => {
   const [atsResult, setAtsResult] = useState<ATSResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [aiAvailable, setAiAvailable] = useState(false);
+  const [customPrompt, setCustomPrompt] = useState('');
+  const [canUseAI, setCanUseAI] = useState(true);
 
   useEffect(() => {
     // Check AI availability on component mount
     checkAiAvailability();
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = usageLimitService.subscribe(({ isLimited }) => {
+      setCanUseAI(!isLimited);
+    });
+
+    return unsubscribe;
   }, []);
 
   const checkAiAvailability = async () => {
@@ -49,13 +61,26 @@ const ATSAnalyzer: React.FC = () => {
       return;
     }
 
+    // Check usage limit
+    if (!usageLimitService.canUseAI()) {
+      alert('You have reached your free usage limit. Please wait for the reset time.');
+      return;
+    }
+
     setLoading(true);
     
     try {
       console.log('🚀 Starting AI-powered ATS analysis...');
       
       // Call AI service
-      const result = await geminiService.analyzeResume(finalResumeText, jobDescription);
+      const result = await geminiService.analyzeResume(
+        finalResumeText, 
+        jobDescription, 
+        customPrompt.trim() || undefined
+      );
+      
+      // Use AI quota
+      usageLimitService.useAI();
       
       console.log('✅ Analysis complete!');
       setAtsResult(result);
@@ -113,6 +138,9 @@ const ATSAnalyzer: React.FC = () => {
         </div>
       </div>
 
+      {/* Usage Limit Banner */}
+      <UsageLimitBanner toolName="ATS Analyzer" />
+
       <div className="bg-white rounded-2xl shadow-2xl p-8 border border-gray-100">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div className="space-y-6">
@@ -154,6 +182,21 @@ Education: Bachelor's in Computer Science"
           </div>
           
           <div className="space-y-6">
+            {/* Custom Prompt Section */}
+            <div>
+              <label className="flex items-center space-x-2 text-sm font-semibold text-gray-700 mb-3">
+                <Sparkles className="h-5 w-5 text-yellow-500" />
+                <span>Custom Instructions (Optional)</span>
+              </label>
+              <textarea
+                value={customPrompt}
+                onChange={(e) => setCustomPrompt(e.target.value)}
+                placeholder="Add any specific instructions for the AI analysis (optional)..."
+                rows={3}
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 resize-none"
+              />
+            </div>
+
             <h3 className="text-xl font-bold text-gray-900 flex items-center">
               <Target className="h-6 w-6 mr-2 text-purple-600" />
               Job Description
@@ -195,7 +238,7 @@ Requirements:
         <div className="mt-8 flex justify-center">
           <button
             onClick={handleAnalyze}
-            disabled={loading || (!resumeFile && !resumeText) || !jobDescription}
+            disabled={loading || (!resumeFile && !resumeText) || !jobDescription || !canUseAI}
             className="px-12 py-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-2xl hover:from-purple-700 hover:to-blue-700 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed transition-all duration-300 flex items-center space-x-3 shadow-xl hover:shadow-2xl transform hover:scale-105 disabled:transform-none text-lg font-semibold"
           >
             {loading ? (
@@ -237,7 +280,7 @@ Requirements:
       
       {/* Resume Rebuilder Section */}
       {atsResult && (resumeText || resumeFile) && (
-        <ResumeRebuilder 
+        <ResumeRebuilder
           originalResume={resumeText}
           jobDescription={jobDescription}
           atsResult={atsResult}

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { DollarSign, MapPin, Clock, Briefcase, TrendingUp, Brain, Calculator, Sparkles, Target, Building, GraduationCap, Award } from 'lucide-react';
+import UsageLimitBanner from './UsageLimitBanner';
 import { geminiService } from '../services/geminiService';
+import { usageLimitService } from '../services/usageLimitService';
 
 interface SalaryData {
   jobRole: string;
@@ -49,6 +51,7 @@ const SalaryCalculator: React.FC = () => {
   const [result, setResult] = useState<SalaryResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [aiAvailable, setAiAvailable] = useState(false);
+  const [canUseAI, setCanUseAI] = useState(true);
 
   const experienceLevels = [
     'Fresher',
@@ -105,6 +108,14 @@ const SalaryCalculator: React.FC = () => {
     checkAiAvailability();
   }, []);
 
+  useEffect(() => {
+    const unsubscribe = usageLimitService.subscribe(({ isLimited }) => {
+      setCanUseAI(!isLimited);
+    });
+
+    return unsubscribe;
+  }, []);
+
   const checkAiAvailability = async () => {
     const available = await geminiService.isAvailable();
     setAiAvailable(available);
@@ -116,12 +127,21 @@ const SalaryCalculator: React.FC = () => {
       return;
     }
 
+    // Check usage limit
+    if (!usageLimitService.canUseAI()) {
+      alert('You have reached your free usage limit. Please wait for the reset time.');
+      return;
+    }
+
     setLoading(true);
 
     try {
       console.log('🚀 Starting AI-powered salary analysis...');
       
       const salaryResult = await geminiService.calculateSalary(formData);
+      
+      // Use AI quota
+      usageLimitService.useAI();
       setResult(salaryResult);
       
       console.log('✅ Salary analysis complete!');
@@ -169,6 +189,9 @@ const SalaryCalculator: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Usage Limit Banner */}
+      <UsageLimitBanner toolName="Salary Calculator" />
 
       {/* Calculator Form */}
       <div className="bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden">
@@ -316,7 +339,7 @@ const SalaryCalculator: React.FC = () => {
           <div className="mt-8 flex justify-center">
             <button
               onClick={handleCalculate}
-              disabled={loading || !formData.jobRole || !formData.location}
+              disabled={loading || !formData.jobRole || !formData.location || !canUseAI}
               className="px-12 py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-2xl hover:from-green-700 hover:to-emerald-700 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed transition-all duration-300 flex items-center space-x-3 shadow-xl hover:shadow-2xl transform hover:scale-105 disabled:transform-none text-lg font-semibold"
             >
               {loading ? (
