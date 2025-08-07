@@ -30,39 +30,76 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
       {/* Top Navigation */}
       <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
- <div className="flex items-center h-16 space-x-8">
-  {/* Logo and AI Tools - Left Side */}
-  <div className="flex items-center space-x-3">
-    <Briefcase className="h-8 w-8 text-blue-600" />
-    <span className="text-2xl font-bold text-gray-900">FresherHub</span>
-     
-    {/* AI Tools Dropdown */}
-    <div className="relative ml-8">
-      <button
-        onClick={() => setShowAIToolsDropdown(!showAIToolsDropdown)}
-        className="flex items-center space-x-1 text-gray-700 hover:text-gray-900 font-medium"
-      >
-        <span>AI Tools</span>
-        <ChevronDown className="h-4 w-4" />
-      </button>
-      {showAIToolsDropdown && (
-        <div className="absolute ...">
-          {/* ... dropdown content ... */}
-        </div>
-      )}
-    </div>
-  </div>
-
-  {/* Navigation Links - Right Side */}
-  <div className="hidden md:flex items-center space-x-8">
-    <a href="#" className="text-gray-700 hover:text-gray-900 font-medium">Home</a>
-    <button
-      onClick={() => onNavigate('jobs')}
-      className="text-gray-700 hover:text-gray-900 font-medium"
-    >
-      Find Jobs
-    </button>
-  </div>
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center space-x-3">
+              <Briefcase className="h-8 w-8 text-blue-600" />
+              <span className="text-2xl font-bold text-gray-900">FresherHub</span>
+            </div>
+            
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-8">
+              <a href="#" className="text-gray-700 hover:text-gray-900 font-medium">Home</a>
+              <button
+                onClick={() => onNavigate('jobs')}
+                className="text-gray-700 hover:text-gray-900 font-medium"
+              >
+                Find Jobs
+              </button>
+              
+              {/* AI Tools Dropdown */}
+              <div className="relative">
+                <button
+                  onClick={() => setShowAIToolsDropdown(!showAIToolsDropdown)}
+                  className="flex items-center space-x-1 text-gray-700 hover:text-gray-900 font-medium"
+                >
+                  <span>AI Tools</span>
+                  <ChevronDown className="h-4 w-4" />
+                </button>
+                {showAIToolsDropdown && (
+                  <div className="absolute top-full right-0 mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50">
+                    <button
+                      onClick={() => {
+                        onNavigate('ats');
+                        setShowAIToolsDropdown(false);
+                      }}
+                      className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3"
+                    >
+                      <FileText className="h-5 w-5 text-purple-600" />
+                      <div>
+                        <div className="font-medium text-gray-900">ATS Analyser + Resume Builder</div>
+                        <div className="text-sm text-gray-500">Scan & rebuild your resume with AI</div>
+                      </div>
+                    </button>
+                    <button
+                      onClick={() => {
+                        onNavigate('cover');
+                        setShowAIToolsDropdown(false);
+                      }}
+                      className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3"
+                    >
+                      <Mail className="h-5 w-5 text-indigo-600" />
+                      <div>
+                        <div className="font-medium text-gray-900">Cover Letter & Job Email Writer</div>
+                        <div className="text-sm text-gray-500">AI-powered application materials</div>
+                      </div>
+                    </button>
+                    <button
+                      onClick={() => {
+                        onNavigate('salary');
+                        setShowAIToolsDropdown(false);
+                      }}
+                      className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3"
+                    >
+                      <Calculator className="h-5 w-5 text-green-600" />
+                      <div>
+                        <div className="font-medium text-gray-900">Salary Checker</div>
+                        <div className="text-sm text-gray-500">Check fresher salaries in India</div>
+                      </div>
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
           
 
            {/* Mobile Menu Button */}
@@ -127,9 +164,8 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
               🚀 Boost Your Job Hunt With Free AI Tools
-            </h2>
-            <p className="text-lg text-gray-600">
-              Trusted by 10,000+ freshers. No login, no credit card — always free.
+            <p className="text-gray-300 mb-4">
+              Your gateway to finding dream jobs and optimizing your resume for success. Empowering freshers to land their perfect career opportunities.
             </p>
           </div>
 
@@ -138,7 +174,7 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
             <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-8 border border-purple-200 hover:shadow-lg transition-all duration-300">
               <div className="flex items-center space-x-3 mb-4">
                 <div className="p-3 bg-purple-600 rounded-xl">
-                  <Sparkles className="h-6 w-6 text-white" />
+                  <FileText className="h-6 w-6 text-white" />
                 </div>
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">
@@ -149,7 +185,7 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
               </p>
               <button
                 onClick={() => onNavigate('ats')}
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white px-6 py-4 rounded-lg font-semibold transition-colors text-center"
+                className="w-full bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
               >
                 Try Free
               </button>
@@ -159,7 +195,7 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
             <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-2xl p-8 border border-indigo-200 hover:shadow-lg transition-all duration-300">
               <div className="flex items-center space-x-3 mb-4">
                 <div className="p-3 bg-indigo-600 rounded-xl">
-                  <Sparkles className="h-6 w-6 text-white" />
+                  <Mail className="h-6 w-6 text-white" />
                 </div>
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">
@@ -170,7 +206,7 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
               </p>
               <button
                 onClick={() => onNavigate('cover')}
-                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-4 rounded-lg font-semibold transition-colors text-center"
+                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
               >
                 Try Free
               </button>
@@ -180,7 +216,7 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
             <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-8 border border-green-200 hover:shadow-lg transition-all duration-300">
               <div className="flex items-center space-x-3 mb-4">
                 <div className="p-3 bg-green-600 rounded-xl">
-                  <Sparkles className="h-6 w-6 text-white" />
+                  <Calculator className="h-6 w-6 text-white" />
                 </div>
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">
@@ -191,7 +227,7 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
               </p>
               <button
                 onClick={() => onNavigate('salary')}
-                className="w-full bg-green-600 hover:bg-green-700 text-white px-6 py-4 rounded-lg font-semibold transition-colors text-center"
+                className="w-full bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
               >
                 Try Free
               </button>
