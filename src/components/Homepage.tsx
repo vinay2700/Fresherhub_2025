@@ -168,7 +168,7 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
               },
               {
                 icon: <Mail className="h-6 w-6 text-white" />,
-                title: 'Write a cover letter — in seconds, personalized for your job',
+                title: 'Write a cover letter / cold email in seconds, personalized for your job',
                 description: 'Create personalized cover letters and professional cold emails instantly with AI-powered content generation.',
                 color: 'indigo',
                 onClick: () => onNavigate('cover')
