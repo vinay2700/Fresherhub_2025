@@ -40,7 +40,6 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
       <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            {/* Left side: Logo + Nav */}
             <div className="flex items-center space-x-6">
               <div className="flex items-center space-x-2">
                 <Briefcase className="h-8 w-8 text-blue-600" />
@@ -94,8 +93,6 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
                 </div>
               </div>
             </div>
-
-            {/* (Optional) Mobile menu */}
             <div className="md:hidden">
               <button className="text-gray-700 hover:text-gray-900">
                 <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -154,7 +151,6 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">🚀 Boost Your Job Hunt With Free AI Tools</h2>
-            
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -164,6 +160,7 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
                 title: 'Scan your resume for ATS — rebuild it instantly with AI',
                 description: 'Get your resume analyzed by AI, receive compatibility scores, and get an optimized version built automatically.',
                 color: 'purple',
+                buttonText: 'Scan & Rebuild',
                 onClick: () => onNavigate('ats')
               },
               {
@@ -171,6 +168,7 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
                 title: 'Write cover letter & cold email in seconds, personalized for your job',
                 description: 'Create personalized cover letters and professional cold emails instantly with AI-powered content generation.',
                 color: 'indigo',
+                buttonText: 'Generate Content',
                 onClick: () => onNavigate('cover')
               },
               {
@@ -178,9 +176,10 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
                 title: "Check your fresher salary — see what you're worth",
                 description: 'Get accurate salary estimates powered by AI. Analyze market trends, location factors, and skill premiums.',
                 color: 'green',
+                buttonText: 'Check Salary',
                 onClick: () => onNavigate('salary')
               }
-            ].map(({ icon, title, description, color, onClick }, idx) => (
+            ].map(({ icon, title, description, color, buttonText, onClick }, idx) => (
               <div key={idx} className={`flex flex-col justify-between h-full bg-gradient-to-br from-${color}-50 to-${color}-100 rounded-2xl p-8 border border-${color}-200 hover:shadow-lg transition-all duration-300`}>
                 <div>
                   <div className={`p-3 bg-${color}-600 rounded-xl w-fit mb-4`}>
@@ -193,7 +192,7 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
                   onClick={onClick}
                   className={`mt-6 w-full bg-${color}-600 hover:bg-${color}-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors`}
                 >
-                  Launch Tool
+                  {buttonText}
                 </button>
               </div>
             ))}
@@ -232,4 +231,5 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
 };
 
 export default Homepage;
+
 
