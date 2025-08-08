@@ -43,7 +43,7 @@ const ATSAnalyzer: React.FC = () => {
     if (resumeFile && !resumeText) {
       try {
         finalResumeText = await extractTextFromFile(resumeFile);
-        setResumeText(finalResumeText); // Store extracted text for resume rebuilder
+        // Don't set the resumeText state to avoid showing extracted content in the textarea
       } catch (error) {
         console.error('Error extracting text from file:', error);
         alert('Could not extract text from file. Please paste your resume text manually.');

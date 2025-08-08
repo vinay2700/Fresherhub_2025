@@ -119,7 +119,8 @@ const Footer: React.FC = () => {
               <span className="text-2xl font-bold">FresherHub</span>
             </div>
             <p className="text-gray-300 leading-relaxed">
-              Your gateway to finding dream jobs and optimizing your resume for success. Empowering freshers to land their perfect career opportunities.
+              AI-powered job search platform designed specifically for freshers. 
+              Find jobs, optimize resumes, and accelerate your career.
             </p>
             <div className="flex space-x-4">
               <a href="#" className="p-2 bg-white/10 rounded-lg hover:bg-white/20 transition-colors">
@@ -134,46 +135,24 @@ const Footer: React.FC = () => {
             </div>
           </div>
 
-          <div>
-            <h3 className="font-bold text-lg mb-6 text-blue-300">For Job Seekers</h3>
-            <ul className="space-y-3 text-gray-300">
-              <li><a href="#" className="hover:text-white transition-colors flex items-center space-x-2">
-                <span>Browse Jobs</span>
-              </a></li>
-              <li><a href="#" className="hover:text-white transition-colors flex items-center space-x-2">
-                <span>ATS Analyzer</span>
-              </a></li>
-              <li><a href="#" className="hover:text-white transition-colors flex items-center space-x-2">
-                <span>Resume Tips</span>
-              </a></li>
-              <li><a href="#" className="hover:text-white transition-colors flex items-center space-x-2">
-                <span>Interview Prep</span>
-              </a></li>
-              <li><a href="#" className="hover:text-white transition-colors flex items-center space-x-2">
-                <span>Career Guide</span>
-              </a></li>
-            </ul>
-          </div>
 
           <div>
             <h3 className="font-bold text-lg mb-6 text-purple-300">Company</h3>
             <ul className="space-y-3 text-gray-300">
-              <li><a href="#" className="hover:text-white transition-colors">About Us</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">About</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Terms of Service</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Help Center</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Privacy</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Terms</a></li>
             </ul>
           </div>
 
           <div>
-            <h3 className="font-bold text-lg mb-6 text-green-300">Resources</h3>
+            <h3 className="font-bold text-lg mb-6 text-green-300">Tools</h3>
             <ul className="space-y-3 text-gray-300">
+              <li><a href="#" className="hover:text-white transition-colors">ATS Analyzer</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Cover Letter Writer</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Salary Calculator</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Industry Insights</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Blog</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Success Stories</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">FAQ</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Job Search</a></li>
             </ul>
           </div>
         </div>

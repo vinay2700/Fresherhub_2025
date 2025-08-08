@@ -42,7 +42,7 @@ function App() {
         {activeTab === 'admin' && <AdminPanel />}
       </main>
       
-      {activeTab !== 'home' && <Footer />}
+      <Footer />
     </div>
   );
 }
