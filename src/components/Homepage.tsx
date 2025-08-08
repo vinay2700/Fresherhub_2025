@@ -266,8 +266,9 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
             </div>
           </div>
         </div>
-     );
-};
-
+        </section>
+    );
+  );
+      
       
 export default Homepage;
