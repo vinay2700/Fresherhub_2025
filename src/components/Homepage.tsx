@@ -20,7 +20,6 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
   const [jobQuery, setJobQuery] = useState('');
   const [locationQuery, setLocationQuery] = useState('');
   const [showAIToolsDropdown, setShowAIToolsDropdown] = useState(false);
-  const [showMobileMenu, setShowMobileMenu] = useState(false);
 
   const handleJobSearch = () => {
     onNavigate('jobs', {
@@ -41,7 +40,7 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
       <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            {/* Logo + Nav Items on Left */}
+            {/* Left side: Logo + Nav */}
             <div className="flex items-center space-x-6">
               <div className="flex items-center space-x-2">
                 <Briefcase className="h-8 w-8 text-blue-600" />
@@ -49,9 +48,7 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
               </div>
               <div className="hidden md:flex items-center space-x-6">
                 <a href="#" className="text-gray-700 hover:text-gray-900 font-medium">Home</a>
-                <button onClick={() => onNavigate('jobs')} className="text-gray-700 hover:text-gray-900 font-medium">
-                  Find Jobs
-                </button>
+                <button onClick={() => onNavigate('jobs')} className="text-gray-700 hover:text-gray-900 font-medium">Find Jobs</button>
                 <div className="relative">
                   <button
                     onClick={() => setShowAIToolsDropdown(!showAIToolsDropdown)}
@@ -63,10 +60,7 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
                   {showAIToolsDropdown && (
                     <div className="absolute top-full left-0 mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50">
                       <button
-                        onClick={() => {
-                          onNavigate('ats');
-                          setShowAIToolsDropdown(false);
-                        }}
+                        onClick={() => { onNavigate('ats'); setShowAIToolsDropdown(false); }}
                         className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3"
                       >
                         <FileText className="h-5 w-5 text-purple-600" />
@@ -76,10 +70,7 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
                         </div>
                       </button>
                       <button
-                        onClick={() => {
-                          onNavigate('cover');
-                          setShowAIToolsDropdown(false);
-                        }}
+                        onClick={() => { onNavigate('cover'); setShowAIToolsDropdown(false); }}
                         className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3"
                       >
                         <Mail className="h-5 w-5 text-indigo-600" />
@@ -89,10 +80,7 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
                         </div>
                       </button>
                       <button
-                        onClick={() => {
-                          onNavigate('salary');
-                          setShowAIToolsDropdown(false);
-                        }}
+                        onClick={() => { onNavigate('salary'); setShowAIToolsDropdown(false); }}
                         className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3"
                       >
                         <Calculator className="h-5 w-5 text-green-600" />
@@ -107,7 +95,7 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
               </div>
             </div>
 
-            {/* Mobile Hamburger */}
+            {/* (Optional) Mobile menu */}
             <div className="md:hidden">
               <button className="text-gray-700 hover:text-gray-900">
                 <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -165,82 +153,55 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
       <section className="py-16 bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              🚀 Boost Your Job Hunt With Free AI Tools
-            </h2>
-            <p className="text-lg text-gray-600">
-              Trusted by 10,000+ freshers. No login, no credit card — always free.
-            </p>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">🚀 Boost Your Job Hunt With Free AI Tools</h2>
+            <p className="text-lg text-gray-600">Trusted by 10,000+ freshers. No login, no credit card — always free.</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* ATS */}
-            <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-8 border border-purple-200 hover:shadow-lg transition-all duration-300">
-              <div className="flex items-center space-x-3 mb-4">
-                <div className="p-3 bg-purple-600 rounded-xl">
-                  <FileText className="h-6 w-6 text-white" />
+            {[
+              {
+                icon: <FileText className="h-6 w-6 text-white" />,
+                title: 'Scan your resume for ATS — rebuild it instantly with AI',
+                description: 'Get your resume analyzed by AI, receive compatibility scores, and get an optimized version built automatically.',
+                color: 'purple',
+                onClick: () => onNavigate('ats')
+              },
+              {
+                icon: <Mail className="h-6 w-6 text-white" />,
+                title: 'Write a cover letter — in seconds, personalized for your job',
+                description: 'Create personalized cover letters and professional cold emails instantly with AI-powered content generation.',
+                color: 'indigo',
+                onClick: () => onNavigate('cover')
+              },
+              {
+                icon: <Calculator className="h-6 w-6 text-white" />,
+                title: "Check your fresher salary — see what you're worth",
+                description: 'Get accurate salary estimates powered by AI. Analyze market trends, location factors, and skill premiums.',
+                color: 'green',
+                onClick: () => onNavigate('salary')
+              }
+            ].map(({ icon, title, description, color, onClick }, idx) => (
+              <div key={idx} className={`flex flex-col justify-between h-full bg-gradient-to-br from-${color}-50 to-${color}-100 rounded-2xl p-8 border border-${color}-200 hover:shadow-lg transition-all duration-300`}>
+                <div>
+                  <div className={`p-3 bg-${color}-600 rounded-xl w-fit mb-4`}>
+                    {icon}
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">{title}</h3>
+                  <p className="text-gray-600">{description}</p>
                 </div>
+                <button
+                  onClick={onClick}
+                  className={`mt-6 w-full bg-${color}-600 hover:bg-${color}-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors`}
+                >
+                  Launch Tool
+                </button>
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">
-                Scan your resume for ATS — rebuild it instantly with AI
-              </h3>
-              <p className="text-gray-600 mb-6">
-                Get your resume analyzed by AI, receive compatibility scores, and get an optimized version built automatically.
-              </p>
-              <button
-                onClick={() => onNavigate('ats')}
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
-              >
-                Try Free
-              </button>
-            </div>
-
-            {/* Cover */}
-            <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-2xl p-8 border border-indigo-200 hover:shadow-lg transition-all duration-300">
-              <div className="flex items-center space-x-3 mb-4">
-                <div className="p-3 bg-indigo-600 rounded-xl">
-                  <Mail className="h-6 w-6 text-white" />
-                </div>
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">
-                Write a cover letter — in seconds, personalized for your job
-              </h3>
-              <p className="text-gray-600 mb-6">
-                Create personalized cover letters and professional cold emails instantly with AI-powered content generation.
-              </p>
-              <button
-                onClick={() => onNavigate('cover')}
-                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
-              >
-                Try Free
-              </button>
-            </div>
-
-            {/* Salary */}
-            <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-8 border border-green-200 hover:shadow-lg transition-all duration-300">
-              <div className="flex items-center space-x-3 mb-4">
-                <div className="p-3 bg-green-600 rounded-xl">
-                  <Calculator className="h-6 w-6 text-white" />
-                </div>
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">
-                Check your fresher salary — see what you're worth
-              </h3>
-              <p className="text-gray-600 mb-6">
-                Get accurate salary estimates powered by AI. Analyze market trends, location factors, and skill premiums.
-              </p>
-              <button
-                onClick={() => onNavigate('salary')}
-                className="w-full bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
-              >
-                Try Free
-              </button>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Trust Banner */}
+      {/* Trust Section */}
       <section className="py-12 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="flex items-center justify-center space-x-2 mb-4">
@@ -271,3 +232,4 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
 };
 
 export default Homepage;
+
