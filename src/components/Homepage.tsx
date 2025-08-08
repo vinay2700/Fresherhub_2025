@@ -160,7 +160,7 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
                 title: 'Scan your resume for ATS — rebuild it instantly with AI',
                 description: 'Get your resume analyzed by AI, receive compatibility scores, and get an optimized version built automatically.',
                 color: 'purple',
-                buttonText: 'Scan & Rebuild',
+                buttonText: '🚀 Scan & Rebuild',
                 onClick: () => onNavigate('ats')
               },
               {
@@ -168,7 +168,7 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
                 title: 'Write cover letter & cold email in seconds, personalized for your job',
                 description: 'Create personalized cover letters and professional cold emails instantly with AI-powered content generation.',
                 color: 'indigo',
-                buttonText: 'Generate Content',
+                buttonText: '✍️ Generate Content',
                 onClick: () => onNavigate('cover')
               },
               {
@@ -176,7 +176,7 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
                 title: "Check your fresher salary — see what you're worth",
                 description: 'Get accurate salary estimates powered by AI. Analyze market trends, location factors, and skill premiums.',
                 color: 'green',
-                buttonText: 'Check Salary',
+                buttonText: '💰 Check Salary',
                 onClick: () => onNavigate('salary')
               }
             ].map(({ icon, title, description, color, buttonText, onClick }, idx) => (
