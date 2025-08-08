@@ -150,7 +150,7 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
       <section className="py-16 bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">🚀 Boost Your Job Hunt With Free AI Tools</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">⚡ Power Your Job Search with Smart AI Tools</h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -159,7 +159,7 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
                 icon: <FileText className="h-6 w-6 text-white" />,
                 title: 'Scan your resume for ATS — rebuild it instantly with AI',
                 description: 'Get your resume analyzed by AI, receive compatibility scores, and get an optimized version built automatically.',
-                color: 'purple',
+                bgColor: 'bg-purple-600',
                 buttonText: '🚀 Scan & Rebuild',
                 onClick: () => onNavigate('ats')
               },
@@ -167,7 +167,7 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
                 icon: <Mail className="h-6 w-6 text-white" />,
                 title: 'Write cover letter & cold email in seconds, personalized for your job',
                 description: 'Create personalized cover letters and professional cold emails instantly with AI-powered content generation.',
-                color: 'indigo',
+                bgColor: 'bg-indigo-600',
                 buttonText: '✍️ Generate Content',
                 onClick: () => onNavigate('cover')
               },
@@ -175,14 +175,14 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
                 icon: <Calculator className="h-6 w-6 text-white" />,
                 title: "Check your fresher salary — see what you're worth",
                 description: 'Get accurate salary estimates powered by AI. Analyze market trends, location factors, and skill premiums.',
-                color: 'green',
+                bgColor: 'bg-green-600',
                 buttonText: '💰 Check Salary',
                 onClick: () => onNavigate('salary')
               }
-            ].map(({ icon, title, description, color, buttonText, onClick }, idx) => (
-              <div key={idx} className={`flex flex-col justify-between h-full bg-gradient-to-br from-${color}-50 to-${color}-100 rounded-2xl p-8 border border-${color}-200 hover:shadow-lg transition-all duration-300`}>
+            ].map(({ icon, title, description, bgColor, buttonText, onClick }, idx) => (
+              <div key={idx} className={`flex flex-col justify-between h-full bg-white rounded-2xl p-8 border border-gray-200 hover:shadow-lg transition-all duration-300`}>
                 <div>
-                  <div className={`p-3 bg-${color}-600 rounded-xl w-fit mb-4`}>
+                  <div className={`p-3 ${bgColor} rounded-xl w-fit mb-4`}>
                     {icon}
                   </div>
                   <h3 className="text-xl font-bold text-gray-900 mb-3">{title}</h3>
@@ -190,7 +190,7 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
                 </div>
                 <button
                   onClick={onClick}
-                  className={`mt-6 w-full bg-${color}-600 hover:bg-${color}-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors`}
+                  className={`mt-6 w-full ${bgColor} hover:opacity-90 text-white px-6 py-3 rounded-lg font-semibold transition-colors`}
                 >
                   {buttonText}
                 </button>
@@ -231,5 +231,6 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
 };
 
 export default Homepage;
+
 
 
