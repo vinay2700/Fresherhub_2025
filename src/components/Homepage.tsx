@@ -150,7 +150,7 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigate }) => {
       <section className="py-16 bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">⚡ Power Your Job Search with Smart AI Tools</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">🚀 Boost Your Job Hunt With Free AI Tools</h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
